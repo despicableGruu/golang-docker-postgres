@@ -1,102 +1,93 @@
-# Description
+##  Go REST API with PostgreSQL
 
-This project is a *Go language* learning project with simple RestFul services. It uses postgres db inside with docker-compose. You can compose with dockerfile or create your own postgres database without it. 
+This project provides a simple RESTful API built with Go, interacting with a PostgreSQL database.  It includes Docker Compose for easy setup and management.
 
-For run docker-compose, you need to write following commands. In your project folder,
 
-```
-      cd docker
-      docker-compose up
-```
+**Prerequisites:**
 
-then PostgreSQL works on 32300 Port (32300 -> 5432). You can access with database IDE (DataGrip, Intellij etc.) with configure port 32300.
+* Go installed on your system.
+* Docker and Docker Compose installed.
 
-If you want to conncect from your host system type the following command to terminal.
-```
-      psql -h localhost -p 32300 -d docker -U docker --password
-```
 
-For more information about it,
+**Getting Started:**
 
-[Dockerize PostgreSQL](https://docs.docker.com/engine/examples/postgresql_service/#connecting-from-your-host-system)
+1. **Clone the repository:**
+   ```bash
+   git clone [repository_url]
+   ```
 
-# Database table configuration
-```
-      CREATE TABLE USERS (
-        ID INT PRIMARY KEY,
-        NAME TEXT NOT NULL,
-        SURNAME TEXT NOT NULL,
-        AGE INT NOT NULL
-      );
-      
-      CREATE SEQUENCE public.users_id_seq NO MINVALUE NO MAXVALUE NO CYCLE;
-      ALTER TABLE public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq');
-      ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
-```
+2. **Build and run the application using Docker Compose:**
+   ```bash
+   cd docker
+   docker-compose up -d 
+   ```
 
-# Database access configuration inside code 
-Under config/config.go directory in the project, you will find database access configuration. You can change it with your custom configuration.
-```
-      DB_USER     = "docker"
-      DB_PASSWORD = "docker"
-      DB_NAME     = "docker"
-      PORT = "32770"
-```
-# How can run?
+3. **Access the Database:** 
+   You can connect to the PostgreSQL instance using your preferred database client, configured with:
+   * Host: localhost
+   * Port: 32300
+   * Database: docker
+   * User: docker
+   * Password: docker
 
-First of all, you need to have *Go* in your computer. For Mac you can install with brew easily.
 
-```
-      brew install go
-```
+**API Endpoints:**
 
-If everything is OK, you should encounter an output like this at terminal when wrote *go version*.
+* **Get All Users:**
+   ```
+   GET /getAll
+   ```
 
-```
-      go version                                    
-      go version go1.9.2 darwin/amd64
-```
-You need to following library for the postgres.
-```
-      go get github.com/lib/pq
-```
-For run the project, in the project directory you need to write following command.
+* **Create a New User:**
+   ```
+   POST /newUser
+   ```
+   Request Body (JSON):
+   ```json
+   {
+     "name": "John",
+     "surname": "Doe",
+     "age": 30
+   }
+   ```
 
-```
-      go run main.go
-```
+* **Get User by ID:**
+   ```
+   GET /users/{id}
+   ```
 
-If everything works correctly, you can start the CRUD operations with following URL.
+* **Update User by ID:**
+   ```
+   PUT /users/{id}
+   ```
+   Request Body (JSON):
+   ```json
+   {
+     "name": "John",
+     "surname": "Doe",
+     "age": 35
+   }
+   ```
 
-```
-      http://127.0.0.1:3000
-```
+* **Delete User by ID:**
+   ```
+   DELETE /users/{id} 
+   ```
 
-# URL's and Example
 
-List all of user (Need To Use GET method)
-```
-      http://127.0.0.1:3000/getAll
-```
-Add new User with JSON type ((Need To Use POST method))
-```
-      http://127.0.0.1:3000/newUser
-      
-      {
-      	"name": "mockName",
-      	"surname": "mockSurname",
-      	"age": 30
-      	}
-```
-List one user with the given Id (Need To Use GET method)
-```
-      http://127.0.0.1:3000/users/1
-```
-Update one user with the given Id (Need To Use PUT method)
-```
-      http://127.0.0.1:3000/users/1
-```
-Delete one user with the given Id (Need To Use DELETE method)
-```
-      http://127.0.0.1:3000/users/1
-```
+**Configuration:**
+
+Database connection details can be found and modified in the `config/config.go` file.
+
+
+**Built With:**
+
+* Go
+* PostgreSQL
+* Docker
+* Docker Compose
+
+
+**License:**
+
+This project is licensed under the MIT license. 
